@@ -1,14 +1,44 @@
 const axios = require('axios');
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
 const { authenticate } = require('./middlewares');
-
+const db = require('./database/dbConfig.js');
 module.exports = server => {
   server.post('/api/register', register);
   server.post('/api/login', login);
   server.get('/api/jokes', authenticate, getJokes);
 };
 
+function generateToken(user){
+  const jwtpayload = {
+    ...user,
+    hello:'Welcome to Dad Jokes',
+  };
+
+
+  const jwtOptions= {
+    expiresIn:'1m'
+  }
+  return jwt.sign(jwtpayload,jwtSecrect,jwtOptions)
+}
+
+
+
+
+
 function register(req, res) {
+  const credentials =req.body
+  const hash = bcrypt.hashSync(credentials.password,14);
+  credentials.password = hash;
+  db('users').insert(credentials)
+  .then(ids=>(
+    const id =id[0]
+    const token = generateToken(credentials);
+    res.status(201).json({welcome:credentials.username, token})
+  ))
+  .catch(err=>{
+      res.status(500).json(err);
+  })
   // implement user registration
 }
 

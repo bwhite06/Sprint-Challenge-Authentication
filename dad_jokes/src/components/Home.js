@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import axios from 'axios';
 
-class Login extends Component{
+class Home extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -10,24 +10,17 @@ class Login extends Component{
     };
   }
 
-  componentDidMount(){
-
-  }
-
   handleSubmit = event => {
     event.preventDefault();
-    const endpoint = 'http://localhost:3300/api/login';
+    const endpoint = "http://localhost:3300/api/register" ;
     console.log(this.state);
     axios
     .post(endpoint, this.state)
-    .then(res =>{
-
-      console.log(res.data)})
+    .then(res =>{ console.log(res.data)})
     .catch(err=>{
       console.error('Error',err)
     });
   }
-
   render(){
 return(
   <div>
@@ -41,4 +34,4 @@ return(
 )
   }
 }
-export default Login;
+export default Home;
